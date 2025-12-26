@@ -1,6 +1,4 @@
-import type { BunFile } from "bun";
 import { getAocInput } from "./utils/aoc-input";
-
 
 async function safePassword(): Promise<number> {
   const text: string = await getAocInput(1);
