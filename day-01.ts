@@ -1,8 +1,9 @@
 import type { BunFile } from "bun";
+import { getAocInput } from "./utils/aoc-input";
+
 
 async function safePassword(): Promise<number> {
-  const file: BunFile = Bun.file("inputs/day-01.txt");
-  const text: string = await file.text();
+  const text: string = await getAocInput(1);
   const lines: string[] = text.trim().split("\n");
 
   let position: number = 50;
