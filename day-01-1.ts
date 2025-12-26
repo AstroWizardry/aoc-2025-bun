@@ -2,7 +2,7 @@ import { getAocInput } from "./utils/aoc-input";
 
 async function safePassword(): Promise<number> {
   const text: string = await getAocInput(1);
-  const lines: string[] = text.trim().split("\n");
+  const lines: string[] = text.trim().split("\n").filter((line): line is string => line.length > 0);
 
   let position: number = 50;
   let count: number = 0;

@@ -1,4 +1,4 @@
-import type { HeadersInit } from 'bun';
+import type { BunFile, HeadersInit } from 'bun';
 
 export async function getAocInput(day: number): Promise<string> {
     const repoUrl: string = Bun.env.REPO_URL ?? 'YOUR_REPO_URL_HERE';
@@ -20,12 +20,30 @@ export async function getAocInput(day: number): Promise<string> {
         'User-Agent': userAgent,
     }
 
-    const response: Response = await fetch(url, { headers });
+    try {
+        const response: Response = await fetch(url, { headers });        
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+        const text: string = await response.text();
 
-    if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        if(!text) {
+            throw new Error('Invalid response from API');
+        }
+
+        return text.trimEnd()
+    } catch (error) {
+        const dayPadded: string = day.toString().padStart(2, '0');
+        const localFilePath: string = `inputs/day-${dayPadded}.txt`;
+        try {
+            const file: BunFile = Bun.file(localFilePath);
+            const text: string = await file.text();
+            return text.trimEnd();
+        } catch (fileError) {
+            throw new Error(
+                `Failed to fetch input from API and local file not found at ${localFilePath}. ` +
+                `Original error: ${error instanceof Error ? error.message : String(error)}`
+            );
+        }
     }
-
-    const text: string = await response.text();
-    return text.trimEnd();
 }
