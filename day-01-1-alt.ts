@@ -12,11 +12,19 @@ async function safePassword(): Promise<number> {
     const distance: number = parseInt(line.slice(1), 10);
 
     if (direction === "L") {
-      position = (position - distance + 100) % 100;
+      if (position >= distance) {
+        position = position - distance;
+      } else {
+        position = (position - distance + 100) % 100;
+      }
     } else if (direction === "R") {
-      position = (position + distance) % 100;
+      const newPos = position + distance;
+      if (newPos < 100) {
+        position = newPos;
+      } else {
+        position = newPos % 100;
+      }
     }
-
     if (position === 0) {
       count++;
     }
@@ -31,3 +39,4 @@ safePassword().then((result: number) => {
   console.log("the Password is:", result);
   console.log(`Execution time: ${duration.toFixed(3)}ms`);
 });
+
