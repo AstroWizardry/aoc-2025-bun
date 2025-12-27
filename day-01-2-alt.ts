@@ -11,15 +11,24 @@ async function safePassword2(): Promise<number> {
     const direction: string | undefined = line[0];
     const distance: number = parseInt(line.slice(1), 10);
 
-    if (direction === "L") {      
-      for (let i: number = 0; i < distance; i++) {
-        position = (position - 1 + 100) % 100;
-        if (position === 0) count++;
+    if (direction === "L") {
+      const startPos = position;
+      position = (position - distance + 100) % 100;
+      
+      const minK = Math.ceil((startPos - distance) / 100);
+      const maxK = Math.floor((startPos - 1) / 100);
+      if (minK <= maxK) {
+        count += maxK - minK + 1;
       }
     } else if (direction === "R") {
-      for (let i: number = 0; i < distance; i++) {
-        position = (position + 1) % 100;
-        if (position === 0) count++;
+
+      const startPos = position;
+      position = (position + distance) % 100;
+
+      const minK = Math.ceil((startPos + 1) / 100);
+      const maxK = Math.floor((startPos + distance) / 100);
+      if (minK <= maxK) {
+        count += maxK - minK + 1;
       }
     }
   }
