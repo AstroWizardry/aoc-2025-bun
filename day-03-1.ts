@@ -6,9 +6,7 @@ async function batteryOptimizer (): Promise<number> {
 
     
     function maxTwoDigit(bank: string): number {
-        // this is a check for theoritical faulty bank
-        if (bank.length < 2) return parseInt(bank) || 0;
-
+   
         let bestJoltage: number = 0;
         for (let i = 0; i < bank.length; i++) {
             for (let j = i + 1; j < bank.length; j++) {
