@@ -29,7 +29,7 @@ async function accessibleRolls(): Promise<number> {
                 return count;
             }
 
-            let accessibleCount = 0;
+            let accessibleCount: number = 0;
 
             for (let row = 0; row < grid.length; row++) {
                 for (let col = 0; col < grid[row]!.length; col++) {
