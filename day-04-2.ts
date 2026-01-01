@@ -33,7 +33,7 @@ async function removableRolls(): Promise<number> {
             let hasChanges: boolean = true;
 
 
-            // This will scan the entire grid and removes @ till there no changes
+            // This will scan the entire grid and removes @ till there are no changes
             while(hasChanges) {
                 hasChanges = false;
                 const toRemove: [number, number][] = [];
