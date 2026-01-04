@@ -4,14 +4,51 @@ async function main() {
     const input = await getAocInput(5);
     const [strIdRanges, strIds] = input.split('\n\n') as [string, string];
 
+    // Optimized my data sanitization
     const ranges: Array<[number, number]> = [];
-    for (const line of strIdRanges.split('\n')) {
-        if (line.trim().length === 0) continue;
-        const [start, end] = line.split('-').map(Number) as [number, number];
+    let rangeStart = 0;
+    let rangeEnd = strIdRanges.indexOf('\n', rangeStart);
+    
+    while (rangeEnd !== -1) {
+        const line = strIdRanges.slice(rangeStart, rangeEnd);
+        if (line.trim().length > 0) {
+            const dashIndex = line.indexOf('-');
+            const start = Number(line.slice(0, dashIndex));
+            const end = Number(line.slice(dashIndex + 1));
+            ranges.push([start, end]);
+        }
+        rangeStart = rangeEnd + 1;
+        rangeEnd = strIdRanges.indexOf('\n', rangeStart);
+    }
+    
+    // Handle last line if no trailing newline
+    const lastLine = strIdRanges.slice(rangeStart);
+    if (lastLine.trim().length > 0) {
+        const dashIndex = lastLine.indexOf('-');
+        const start = Number(lastLine.slice(0, dashIndex));
+        const end = Number(lastLine.slice(dashIndex + 1));
         ranges.push([start, end]);
     }
 
-    const ids = strIds.split('\n').map(Number);
+    // Optimized ID parsing - single pass with manual parsing
+    const ids: number[] = [];
+    let idStart = 0;
+    let idEnd = strIds.indexOf('\n', idStart);
+    
+    while (idEnd !== -1) {
+        const idStr = strIds.slice(idStart, idEnd);
+        if (idStr.trim().length > 0) {
+            ids.push(Number(idStr));
+        }
+        idStart = idEnd + 1;
+        idEnd = strIds.indexOf('\n', idStart);
+    }
+    
+    // Handle last ID if no trailing newline
+    const lastId = strIds.slice(idStart);
+    if (lastId.trim().length > 0) {
+        ids.push(Number(lastId));
+    }
 
     function mergedRanges(ranges: Array<[number, number]>) {
         if (ranges.length === 0) return [];
